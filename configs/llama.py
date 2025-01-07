@@ -34,7 +34,7 @@ def get_config():
   """Get the default hyperparameter configuration."""
   config = ml_collections.ConfigDict()
 
-  config.model = 'baffo32/decapoda-research-llama-7B-hf'
+  config.model = 'meta-llama/Llama-2-7b-hf' #'baffo32/decapoda-research-llama-7B-hf'
   config.seed = 0
   config.nsamples = 256                         # number of calibration data
   config.prune_method = 'sparsegpt'             # pruning method ('magnitude', 'sparsegpt', 'wanda')
@@ -42,7 +42,7 @@ def get_config():
   config.sparsity_type = 'unstructured'         # sparsity type ('unstructured', '2:4', '4:8')
   config.M = 0                                  # to be used for N:M structured sparsity
   config.N = 0                                  # to be used for N:M structured sparsity
-  config.cache_dir = 'llm_weights'              # directory to cache dense model
+  config.cache_dir = None #'llm_weights'              # directory to cache dense model
   config.eval_zero_shot = False                 # whether to perform zero shot evaluation for downstream tasks
   config.infer_batch_size = 1
   config.use_fp32 = True

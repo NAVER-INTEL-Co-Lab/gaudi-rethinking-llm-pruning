@@ -34,8 +34,8 @@ def get_config():
   """Get the default hyperparameter configuration."""
   config = ml_collections.ConfigDict()
 
-  config.model = 'baffo32/decapoda-research-llama-7B-hf'    # model to obtain data
-  config.cache_dir = 'llm_weights'                          # directory of the cached dense model
+  config.model = 'meta-llama/Llama-2-7b-hf' #'baffo32/decapoda-research-llama-7B-hf'    # model to obtain data
+  config.cache_dir = None #'llm_weights'                          # directory of the cached dense model
 
   config.seqlen = 2048                                      # sequence length
 

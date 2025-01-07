@@ -2,7 +2,7 @@ import time
 import pandas as pd
 import torch 
 import torch.nn as nn 
-from torch.cuda.amp import autocast
+from torch.amp import autocast
 from ..sparsegpt import SparseGPT 
 from ..layerwrapper import WrappedGPT
 from ..data import get_loaders 
@@ -118,7 +118,7 @@ def prune_magnitude(layer, wrapped_layer, sparsity_ratio, prune_n=0, prune_m=0):
         for ii in range(W_metric.shape[1]):
             if ii % prune_m == 0:
                 tmp = W_metric[:,ii:(ii+prune_m)].float()
-                W_mask.scatter_(1,ii+torch.topk(tmp, prune_n,dim=1, largest=True)[1], True)
+                W_mask.scatter_(1,ii+torch.topk(tmp, prune_n,dim=1, largest=True)[1], 1)
     else:
         thresh = torch.sort(W_metric.flatten().cuda())[0][int(W.numel()*sparsity_ratio)].cpu()
         W_mask = (W_metric>thresh)
@@ -185,9 +185,9 @@ def prune_model(config, model, tokenizer, device=torch.device("cuda:0"), prune_n
     if config.use_cr:
         update_round = len(layers) + 1
         update_start = -1
-    else:
-        # update_round = len(layers)
-        update_round = 1
+    else:  
+        update_round = len(layers)
+        #update_round = 1 # for debugging purpose
         update_start = 0
 
     for i in range(update_start, update_start + update_round):
@@ -301,7 +301,7 @@ def prune_model(config, model, tokenizer, device=torch.device("cuda:0"), prune_n
         
         # calculate outputs for x_sparse after pruning
         with torch.no_grad():
-            with autocast():
+            with autocast(device_type='hpu'):
                 for j in range(0, recon_nsamples, config.infer_batch_size):
                     outs[j:j+config.infer_batch_size] = layer[0](inps[j:j+config.infer_batch_size].to(device), attention_mask=attention_mask.expand(config.infer_batch_size, -1, -1, -1), position_ids=position_ids, device=device)[0].to("cpu")
 
@@ -311,7 +311,7 @@ def prune_model(config, model, tokenizer, device=torch.device("cuda:0"), prune_n
                 outs = inps.clone()
             else:
                 with torch.no_grad():
-                    with autocast():
+                    with autocast(device_type='hpu'):
                         dense_layers[i] = dense_layers[i].to(device)
                         for j in range(0, recon_nsamples, config.infer_batch_size):
                             dense_outs[j:j+config.infer_batch_size] = obtain_output(dense_layers[i:i+1], dense_inps[j:j+config.infer_batch_size].to(device), attention_mask.expand(config.infer_batch_size, -1, -1, -1), position_ids=position_ids).to('cpu')

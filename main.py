@@ -3,6 +3,7 @@ from ml_collections import config_flags
 
 from llama import main as main_llama
 from opt import main as main_opt
+import habana_frameworks.torch.core as htcore
 
 FLAGS = flags.FLAGS
 

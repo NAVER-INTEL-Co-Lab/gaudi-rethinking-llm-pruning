@@ -7,6 +7,8 @@ from lib.llama.modeling import LlamaForCausalLM
 from lib.llama.prune import check_sparsity, prune_model
 from lib.llama.eval import eval_ppl, eval_zero_shot
 from absl import logging
+import habana_frameworks.torch.core as htcore
+
 
 def get_llm(model_name, cache_dir="llm_weights", seqlen=2048):
     model = LlamaForCausalLM.from_pretrained(
@@ -39,7 +41,7 @@ def main(config):
     # Handling n:m sparsity
     prune_n, prune_m = 0, 0
     if config.sparsity_type != "unstructured":
-        assert config.density == 0.5, "sparsity ratio must be 0.5 for structured N:M sparsity"
+        assert config.sparsity_ratio == 0.5, "sparsity ratio must be 0.5 for structured N:M sparsity"
         prune_n, prune_m = map(int, config.sparsity_type.split(":"))
 
     logging.info(f"loading llm model {config.model}")

@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import transformers
 from .linear_type import LinearMasked, LinearMaskedOPT
-
+import pdb
 torch.backends.cuda.matmul.allow_tf32 = False
 torch.backends.cudnn.allow_tf32 = False
 
@@ -50,13 +50,21 @@ class SparseGPT:
         W = W.float()
 
         tick = time.time()
-
         H = self.H
         del self.H
-        dead = torch.diag(H) == 0
-        H[dead, dead] = 1
-        W[:, dead] = 0
 
+        dead = torch.diag(H) == 0
+        # H[dead, dead] = 1
+        # W[:, dead] = 0
+        #gaudi workaround
+        dead_matrix = torch.zeros_like(H, device=self.dev,dtype=torch.bool)
+        diag_indices = torch.arange(H.size(0),device=self.dev)
+        dead_matrix[diag_indices,diag_indices] = dead
+        H = torch.where(dead_matrix,1,H)
+        dead_columns = dead.unsqueeze(0).expand(W.size(0),-1)
+        W = torch.where(dead_columns,0,W)
+        
+        del dead_matrix,dead_columns
         Losses = torch.zeros(self.rows, device=self.dev)
 
         damp = percdamp * torch.mean(torch.diag(H))
@@ -120,7 +128,7 @@ class SparseGPT:
             W = W.t()
         self.layer.mask.data = M
         self.layer.weight.data = W.reshape(self.layer.weight.shape).to(self.layer.weight.data.dtype)
-
+        
     def free(self):
         self.H = None
         torch.cuda.empty_cache()

@@ -6,6 +6,7 @@ from ..data import get_loaders
 import fnmatch
 
 from absl import logging
+import pdb
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
 def eval_ppl(config, model, tokenizer, device=torch.device("cuda:0")):
@@ -71,7 +72,8 @@ def eval_ppl_wikitext(model, testenc, bs=1, device=None):
 
         # Calculate negative log likelihood
         neg_log_likelihood = loss.float() * model.seqlen * (j-i)
-
+        ## cpu offloading
+        neg_log_likelihood = neg_log_likelihood.cpu()
         # Append to list of negative log likelihoods
         nlls.append(neg_log_likelihood)
 
