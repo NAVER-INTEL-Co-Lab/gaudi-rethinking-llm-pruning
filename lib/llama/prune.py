@@ -281,11 +281,14 @@ def prune_model(config, model, tokenizer, device=torch.device("cuda:0"), prune_n
             subset[name].prune_rate = config.sparsity_ratio
         
         # perform reconstruction
+        import time
+        start = time.time()
         if config.use_gp:
             train(layer, inps, dense_outs, dataloader, config, device, attention_mask=attention_mask, position_ids=position_ids)
         else:
             train(layer, inps, outs, dataloader, config, device, attention_mask=attention_mask, position_ids=position_ids)
-        
+        end = time.time()
+        logging.info(f"reconstruction time {end - start}")
         # calculate recon error
         if not config.use_cr:
             recon_error = val(layer, inps, dense_outs, config, device, attention_mask, position_ids)

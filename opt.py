@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -5,6 +6,7 @@ from absl import logging
 
 from lib.opt.prune import prune_model, check_sparsity
 from lib.opt.eval import eval_ppl, eval_zero_shot
+import habana_frameworks.torch.core as htcore
 
 def get_llm(model_name, cache_dir="llm_weights", seqlen=2048):
     model = AutoModelForCausalLM.from_pretrained(
@@ -12,13 +14,18 @@ def get_llm(model_name, cache_dir="llm_weights", seqlen=2048):
         torch_dtype=torch.float16, 
         cache_dir=cache_dir, 
         low_cpu_mem_usage=True, 
-        device_map="auto"
+        device_map="cpu"
     )
 
     model.seqlen = min(model.config.max_position_embeddings, seqlen)
     return model
 
 def main(config):
+    log_dir = './logs'
+    os.makedirs(log_dir, exist_ok=True)
+    # log_path = os.path.join(log_dir, f"{config.model.split('/')[-1]}_sparsity-{config.sparsity_ratio}_prune-{config.sparsity_type}_nsamples-{config.nsamples}.log")
+    logging.get_absl_handler().use_absl_log_file(program_name='app',log_dir=log_dir)
+    logging.set_verbosity(logging.INFO)
     # Setting seeds for reproducibility
     logging.info(config)
     np.random.seed(config.seed)
@@ -41,6 +48,7 @@ def main(config):
     logging.info(f"use device {device}")
 
     logging.info("pruning starts")
+    model = model.to(device)
     if config.sparsity_ratio != 0.0:
         prune_model(config, model, tokenizer, device, prune_n=prune_n, prune_m=prune_m)
     else:

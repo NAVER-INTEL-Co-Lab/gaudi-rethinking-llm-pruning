@@ -1,0 +1,52 @@
+I0107 18:18:08.199749 140249129236480 opt.py:29] M: 0
+N: 0
+accumulation_steps: 1
+adam_beta1: 0.9
+adam_beta2: 0.95
+adam_eps: 1.0e-08
+batch_size: 8
+cache_dir: llm_weights
+epochs: 10
+eval_zero_shot: false
+infer_batch_size: 1
+learning_rate: 0.0002
+lr_scheduler: linear
+max_grad_norm: 1000.0
+model: facebook/opt-125m
+nsamples: 256
+prune_method: magnitude
+seed: 0
+self_nsamples: 0
+seqlen: 1024
+sparsity_ratio: 0.0
+sparsity_type: unstructured
+use_cr: false
+use_fp32: true
+use_gp: false
+warmup_steps: 0
+weight_decay: 0.0
+
+I0107 18:18:08.202314 140249129236480 opt.py:39] loading llm model facebook/opt-125m
+I0107 18:18:09.464320 140249129236480 opt.py:47] use device cuda:0
+I0107 18:18:09.464474 140249129236480 opt.py:49] pruning starts
+I0107 18:18:12.956199 140249129236480 opt.py:56] ******************************
+I0107 18:18:12.966682 140249129236480 prune.py:56] block 0 sparsity 0.000001
+I0107 18:18:12.969337 140249129236480 prune.py:56] block 1 sparsity 0.000001
+I0107 18:18:12.971631 140249129236480 prune.py:56] block 2 sparsity 0.000001
+I0107 18:18:12.973926 140249129236480 prune.py:56] block 3 sparsity 0.000002
+I0107 18:18:12.976211 140249129236480 prune.py:56] block 4 sparsity 0.000001
+I0107 18:18:12.978451 140249129236480 prune.py:56] block 5 sparsity 0.000001
+I0107 18:18:12.981354 140249129236480 prune.py:56] block 6 sparsity 0.000000
+I0107 18:18:12.983599 140249129236480 prune.py:56] block 7 sparsity 0.000002
+I0107 18:18:12.985843 140249129236480 prune.py:56] block 8 sparsity 0.000000
+I0107 18:18:12.988104 140249129236480 prune.py:56] block 9 sparsity 0.000001
+I0107 18:18:12.990334 140249129236480 prune.py:56] block 10 sparsity 0.000001
+I0107 18:18:12.992588 140249129236480 prune.py:56] block 11 sparsity 0.000000
+I0107 18:18:12.992675 140249129236480 opt.py:58] sparsity sanity check 0.0000
+I0107 18:18:12.992719 140249129236480 opt.py:59] ******************************
+I0107 18:18:44.195469 140249129236480 eval.py:20] Evaluating ...
+I0107 18:18:47.836880 140249129236480 eval.py:16] wikitext2 perplexity 27.65316390991211
+I0107 18:18:59.266046 140249129236480 eval.py:20] Evaluating ...
+I0107 18:19:00.601795 140249129236480 eval.py:16] ptb perplexity 38.99198913574219
+I0107 18:19:26.597243 140249129236480 eval.py:20] Evaluating ...
+I0107 18:19:33.135243 140249129236480 eval.py:16] c4 perplexity 26.563066482543945

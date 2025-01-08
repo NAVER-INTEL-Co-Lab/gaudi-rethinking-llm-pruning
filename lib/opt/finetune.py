@@ -3,11 +3,12 @@ from transformers.optimization import get_linear_schedule_with_warmup
 import math
 import torch
 import torch.nn as nn
-from torch.cuda.amp import GradScaler
-from torch.cuda.amp import autocast
+from torch.amp import GradScaler
+from torch.amp import autocast
 from absl import logging
 from ..tensor_dataloader import TensorData, TensorDataLoader
 import torch.nn.functional as F
+import habana_frameworks.torch.core as htcore
 
 class AverageMeter(object):
     """
@@ -62,7 +63,7 @@ def val(layer, inps, outs, config, device, attention_mask):
     with torch.no_grad():
         layer.eval()
         for inputs, outs in tensordata_loader:
-            with autocast():
+            with autocast(device_type='hpu'):
                 outputs = obtain_output(layer, inputs, attention_mask=attention_mask.expand(len(inputs),-1,-1,-1))
                 loss = criterion(outputs, outs)
 
@@ -93,7 +94,7 @@ def train(layer, inps, outs, dataloader, config, device, attention_mask):
     for epoch in range(0, config.epochs):
         ret_loss = 0
         for inputs, outps in tensordata_loader:
-            with autocast():
+            with autocast(device_type='hpu'):
                 with torch.enable_grad():
                     outputs = obtain_output(layer, inputs, attention_mask.expand(len(inputs),-1,-1,-1))
                     loss = criterion(outputs, outps)
@@ -102,6 +103,7 @@ def train(layer, inps, outs, dataloader, config, device, attention_mask):
                         scaler.scale(loss).backward()
                     else:
                         loss.backward()
+                    htcore.mark_step()
             torch.nn.utils.clip_grad_norm_(
                         layer.parameters(), config.max_grad_norm)
             if (n_iter + 1) % config.accumulation_steps == 0:

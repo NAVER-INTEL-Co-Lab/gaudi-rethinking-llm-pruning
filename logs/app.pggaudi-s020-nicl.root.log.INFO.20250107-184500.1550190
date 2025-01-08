@@ -1,0 +1,40 @@
+I0107 18:45:00.416590 140535446722560 llama.py:44] M: 0
+N: 0
+accumulation_steps: 1
+adam_beta1: 0.9
+adam_beta2: 0.95
+adam_eps: 1.0e-08
+batch_size: 8
+cache_dir: null
+epochs: 5
+eval_zero_shot: false
+infer_batch_size: 1
+learning_rate: 0.0002
+lr_scheduler: linear
+max_grad_norm: 1000.0
+model: meta-llama/Llama-2-7b-hf
+nsamples: 256
+prune_method: wanda
+seed: 0
+self_nsamples: 0
+seqlen: 1024
+sparsity_ratio: 0.5
+sparsity_type: unstructured
+use_cr: false
+use_fp32: true
+use_gp: false
+warmup_steps: 0
+weight_decay: 0.0
+
+I0107 18:45:00.419179 140535446722560 llama.py:54] loading llm model meta-llama/Llama-2-7b-hf
+I0107 18:45:01.998589 140535446722560 llama.py:62] use device cuda:0
+I0107 18:45:01.998737 140535446722560 llama.py:64] pruning starts
+I0107 18:45:31.643687 140535446722560 prune.py:202] pruning layer 0
+I0107 18:45:44.647453 140535446722560 finetune.py:128] weight params, number of params: 202383360, weight_decay: 0.0, lr: 0.0002
+I0107 18:46:43.730968 140535446722560 finetune.py:122] [5.351612344384193e-06, 3.7886202335357666e-06, 2.2388994693756104e-06, 2.107582986354828e-06, 2.0693987607955933e-06, 2.0496081560850143e-06]
+I0107 18:46:47.782058 140535446722560 prune.py:292] recon error 2.044951543211937e-06
+I0107 18:46:52.039766 140535446722560 prune.py:202] pruning layer 1
+I0107 18:47:04.722235 140535446722560 finetune.py:128] weight params, number of params: 202383360, weight_decay: 0.0, lr: 0.0002
+I0107 18:48:04.362650 140535446722560 finetune.py:122] [0.018199443817138672, 0.009180068969726562, 0.010477066040039062, 0.003773927688598633, 0.002325773239135742, 0.0008473694324493408]
+I0107 18:48:08.094321 140535446722560 prune.py:292] recon error 0.0008076298981904984
+I0107 18:48:11.641304 140535446722560 prune.py:202] pruning layer 2

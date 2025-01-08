@@ -87,6 +87,7 @@ def prepare_calibration_input(model, dataloader, device, config):
             cache['attention_mask'] = kwargs['attention_mask']
             raise ValueError
     layers[0] = Catcher(layers[0])
+    
     for batch in dataloader:
         try:
             model(batch[0].to(device))
@@ -98,6 +99,7 @@ def prepare_calibration_input(model, dataloader, device, config):
 
     if config.use_fp32:
         inps = inps.float()
+        attention_mask = attention_mask.float()
         dtype = torch.float32
 
     outs = torch.zeros_like(inps)
@@ -292,11 +294,14 @@ def prune_model(config, model, tokenizer, device=torch.device("cuda:0"), prune_n
             subset[name].prune_rate = config.sparsity_ratio
     
         # perform reconstruction
+        import time
+        start = time.time()
         if config.use_gp:
             train(layer, inps, dense_outs, dataloader, config, device, attention_mask=attention_mask)
         else:
             train(layer, inps, outs, dataloader, config, device, attention_mask=attention_mask)
-        
+        end = time.time()
+        logging.info(f"reconstruction time {end-start}")
         layer = layer.to(device)
 
         # calculate recon error

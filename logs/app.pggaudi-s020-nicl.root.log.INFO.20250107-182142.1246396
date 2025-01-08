@@ -1,0 +1,48 @@
+I0107 18:21:42.197956 140519845668864 opt.py:29] M: 0
+N: 0
+accumulation_steps: 1
+adam_beta1: 0.9
+adam_beta2: 0.95
+adam_eps: 1.0e-08
+batch_size: 8
+cache_dir: llm_weights
+epochs: 10
+eval_zero_shot: false
+infer_batch_size: 1
+learning_rate: 0.0002
+lr_scheduler: linear
+max_grad_norm: 1000.0
+model: facebook/opt-125m
+nsamples: 256
+prune_method: magnitude
+seed: 0
+self_nsamples: 0
+seqlen: 1024
+sparsity_ratio: 0.0
+sparsity_type: unstructured
+use_cr: false
+use_fp32: true
+use_gp: false
+warmup_steps: 0
+weight_decay: 0.0
+
+I0107 18:21:42.200485 140519845668864 opt.py:39] loading llm model facebook/opt-125m
+I0107 18:21:43.396735 140519845668864 opt.py:47] use device cuda:0
+I0107 18:21:43.397018 140519845668864 opt.py:49] pruning starts
+I0107 18:21:46.876270 140519845668864 opt.py:56] ******************************
+I0107 18:21:46.885035 140519845668864 prune.py:56] block 0 sparsity 0.000001
+I0107 18:21:46.887417 140519845668864 prune.py:56] block 1 sparsity 0.000001
+I0107 18:21:46.889703 140519845668864 prune.py:56] block 2 sparsity 0.000001
+I0107 18:21:46.891999 140519845668864 prune.py:56] block 3 sparsity 0.000002
+I0107 18:21:46.894327 140519845668864 prune.py:56] block 4 sparsity 0.000001
+I0107 18:21:46.896559 140519845668864 prune.py:56] block 5 sparsity 0.000001
+I0107 18:21:46.899454 140519845668864 prune.py:56] block 6 sparsity 0.000000
+I0107 18:21:46.901710 140519845668864 prune.py:56] block 7 sparsity 0.000002
+I0107 18:21:46.903941 140519845668864 prune.py:56] block 8 sparsity 0.000000
+I0107 18:21:46.906201 140519845668864 prune.py:56] block 9 sparsity 0.000001
+I0107 18:21:46.908429 140519845668864 prune.py:56] block 10 sparsity 0.000001
+I0107 18:21:46.910672 140519845668864 prune.py:56] block 11 sparsity 0.000000
+I0107 18:21:46.910764 140519845668864 opt.py:58] sparsity sanity check 0.0000
+I0107 18:21:46.910810 140519845668864 opt.py:59] ******************************
+I0107 18:22:19.102892 140519845668864 eval.py:20] Evaluating ...
+I0107 18:22:22.807745 140519845668864 eval.py:16] wikitext2 perplexity 27.65316390991211

@@ -1,4 +1,5 @@
 import time
+import os
 import numpy as np
 import torch
 from transformers import AutoTokenizer
@@ -27,12 +28,18 @@ def get_llm_fp16(model_name, cache_dir="llm_weights"):
         torch_dtype=torch.float16, 
         cache_dir=cache_dir, 
         low_cpu_mem_usage=True, 
-        device_map="auto"
+        device_map="cpu"
     )
     model.seqlen = model.config.max_position_embeddings 
     return model
 
 def main(config):
+    log_dir = './logs'
+    os.makedirs(log_dir, exist_ok=True)
+    # log_path = os.path.join(log_dir, f"{config.model.split('/')[-1]}_sparsity-{config.sparsity_ratio}_prune-{config.sparsity_type}_nsamples-{config.nsamples}.log")
+    logging.get_absl_handler().use_absl_log_file(program_name='app',log_dir=log_dir)
+    logging.set_verbosity(logging.INFO)
+
     # Setting seeds for reproducibility
     logging.info(config)
     np.random.seed(config.seed)
@@ -82,3 +89,6 @@ def main(config):
         logging.info("********************************")
         logging.info("zero_shot evaluation results")
         logging.info(results)
+    
+
+    

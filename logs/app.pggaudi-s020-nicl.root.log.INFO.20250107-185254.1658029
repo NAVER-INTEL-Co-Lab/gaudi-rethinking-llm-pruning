@@ -1,0 +1,32 @@
+I0107 18:52:54.779861 139676191717376 opt.py:30] M: 0
+N: 0
+accumulation_steps: 1
+adam_beta1: 0.9
+adam_beta2: 0.95
+adam_eps: 1.0e-08
+batch_size: 8
+cache_dir: llm_weights
+epochs: 10
+eval_zero_shot: false
+infer_batch_size: 1
+learning_rate: 0.0002
+lr_scheduler: linear
+max_grad_norm: 1000.0
+model: facebook/opt-125m
+nsamples: 256
+prune_method: wanda
+seed: 0
+self_nsamples: 0
+seqlen: 1024
+sparsity_ratio: 0.5
+sparsity_type: unstructured
+use_cr: false
+use_fp32: true
+use_gp: false
+warmup_steps: 0
+weight_decay: 0.0
+
+I0107 18:52:54.782501 139676191717376 opt.py:40] loading llm model facebook/opt-125m
+I0107 18:52:56.132193 139676191717376 opt.py:48] use device cuda:0
+I0107 18:52:56.132356 139676191717376 opt.py:50] pruning starts
+I0107 18:53:23.349887 139676191717376 prune.py:206] pruning layer 0

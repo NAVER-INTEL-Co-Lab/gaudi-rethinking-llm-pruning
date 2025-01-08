@@ -1,0 +1,32 @@
+I0108 21:38:56.202988 140474773862400 llama.py:44] M: 0
+N: 0
+accumulation_steps: 1
+adam_beta1: 0.9
+adam_beta2: 0.95
+adam_eps: 1.0e-08
+batch_size: 8
+cache_dir: null
+epochs: 5
+eval_zero_shot: false
+infer_batch_size: 1
+learning_rate: 0.0002
+lr_scheduler: linear
+max_grad_norm: 1000.0
+model: meta-llama/Llama-2-7b-hf
+nsamples: 256
+prune_method: magnitude
+seed: 0
+self_nsamples: 0
+seqlen: 1024
+sparsity_ratio: 0.5
+sparsity_type: unstructured
+use_cr: false
+use_fp32: true
+use_gp: false
+warmup_steps: 0
+weight_decay: 0.0
+
+I0108 21:38:56.205442 140474773862400 llama.py:54] loading llm model meta-llama/Llama-2-7b-hf
+I0108 21:38:57.832413 140474773862400 llama.py:62] use device cuda:0
+I0108 21:38:57.832558 140474773862400 llama.py:64] pruning starts
+I0108 21:39:26.191950 140474773862400 prune.py:202] pruning layer 0
