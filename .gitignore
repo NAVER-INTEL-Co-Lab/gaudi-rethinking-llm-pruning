@@ -4,3 +4,4 @@ __pycache__
 *.out
 *.jsonl
 llm_weights
+logs/*
